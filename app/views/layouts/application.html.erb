@@ -5,32 +5,89 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <script src="https://kit.fontawesome.com/1f24e4a000.js" crossorigin="anonymous"></script>
+    <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
-  <body>
-    <header>
-      <% if user_signed_in? %>
-        <li>
-            <%= link_to '投稿フォーム', new_book_path %>
-        </li>
-        <li>
-          <%= link_to 'マイページ', user_path(current_user.id) %>
-        </li>
-        <li>
-          <%= link_to "ログアウト", destroy_user_session_path, method: :delete %>
-        </li>
-      <% else %>
-        <li>
-          <%= link_to "新規登録", new_user_registration_path %>
-        </li>
-        <li>
-          <%= link_to "ログイン", new_user_session_path %>
-        </li>
-      <% end %>
-    </header>
+
+  <body class="d-flex flex-column vh-100">
+  <header class="shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+      <div class="container">
+        <a class="navbar-brand p-3" href="/">
+          <h1 class="text-white">Bookers</h1>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav ml-auto">
+            <% if user_signed_in? %>
+              <li class="text-white">
+                <%= link_to user_path(current_user.id), class: 'nav-link text-white d-flex align-items-center'  do %>
+                  <i class="fa-solid fa-house mr-2"></i>
+                  <span>Home</span>
+                <% end %>
+              </li>
+              <li>
+                <%= link_to users_path, class: 'nav-link text-white d-flex align-items-center' do %>
+                  <i class="fa-solid fa-users mr-2"></i>
+                  <span>Users</span>
+                <% end %>
+              </li>
+              <li class="nav-item">
+                <%= link_to books_path, class: 'nav-link text-white d-flex align-items-center' do %>
+                  <i class="fa-solid fa-book-open mr-2"></i>
+                  <span>Books</span>
+                <% end %>
+              </li>
+              <li class="nav-item">
+                <%= link_to destroy_user_session_path, method: :delete, class: 'nav-link text-white d-flex align-items-center' do %>
+                  <i class="fa-solid fa-right-from-bracket mr-2"></i>
+                  <span>Log out</span>
+                <% end %>
+              </li>
+            <% else %>
+              <li class="text-white">
+                  <%= link_to root_path, class: 'nav-link text-white d-flex align-items-center'  do %>
+                  <i class="fa-solid fa-house mr-2"></i>
+                  <span>Home</span>
+                <% end %>
+              </li>
+              <li>
+                <%= link_to about_path, class: 'nav-link text-white d-flex align-items-center' do %>
+                  <i class="fa-solid fa-link mr-2"></i>
+                  <span>About</span>
+                <% end %>
+              </li>
+              <li class="nav-item">
+              <%= link_to new_user_registration_path, class: 'nav-link text-white d-flex align-items-center' do %>
+                  <i class="fa-solid fa-user-plus mr-2"></i>
+                  <span>Sign up</span>
+              <% end %>
+            </li>
+              <li class="nav-item">
+                <%= link_to new_user_session_path, class: 'nav-link text-white d-flex align-items-center' do %>
+                  <i class="fa-solid fa-right-to-bracket mr-2"></i>
+                  <span>Log in</span>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="mb-auto">
     <%= yield %>
-  </body>
+  </main>
+
+  <footer class="bg-white text-black pt-5 pb-4 text-center">
+    <p>CopyRight Infratop.inc</p>
+  </footer>
+</body>
 </html>
