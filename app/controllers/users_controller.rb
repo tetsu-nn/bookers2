@@ -3,6 +3,7 @@ class UsersController < ApplicationController
     @user=current_user
     @user1=User.find(params[:id])
     @books=@user1.books
+    @book_comment=BookComment.new
     @booknew=Book.new
   end
 

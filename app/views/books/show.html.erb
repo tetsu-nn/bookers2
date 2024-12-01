@@ -31,31 +31,73 @@
     </div>
 
     <div class="col-md-8 offset-md-1">
-      <h1>Book detail</h1>
-      <hr>
-        <div class="row">
-          <div class="col-md-4 text-center">
-            <%= link_to user_path(@book.user.id), class: "btn  btn-block " do %>
-              <%= image_tag @book.user.get_profile_image(150, 150) %>
-              <%= @book.user.name %>
-            <% end %>
-          </div>
-
-          <div class="col-md-8">
-            <div class="d-flex justify-content-between">
-              <h4><%= link_to @book.title, book_path(@book.id) %></h4>
-              <p><%= @book.body %></p>
-            <% if @book.user == current_user %>
-              <div class="ml-3">
-                <%= link_to "Edit", edit_book_path(@book.id), class: "btn btn-success btn-sm" %>
-              </div>
-              <div class="ml-3">
-                <%= link_to "Destroy", book_path(@book), method: :delete, class: "btn btn-danger btn-sm", data: { confirm: "Are you sure?" } %>
-              </div>
-              </div>
-            <% end %>
-          </div>
+    <h1>Book detail</h1>
+    <hr>
+    <div class="row">
+      <div class="col-md-4 text-center">
+        <%= link_to user_path(@book.user.id), class: "btn btn-block" do %>
+          <%= image_tag @book.user.get_profile_image(150, 150), class: "rounded-circle mb-2" %>
+          <p><strong><%= @book.user.name %></strong></p>
+        <% end %>
+      </div>
+  
+      <div class="col-md-8">
+        <div class="d-flex justify-content-between">
+          <h4><%= link_to @book.title, book_path(@book.id), class: "text-decoration-none text-primary" %></h4>
+          <p><%= @book.body %></p>
         </div>
+        <% if @book.user == current_user %>
+          <div class="d-flex">
+            <%= link_to "Edit", edit_book_path(@book.id), class: "btn btn-success btn-sm mr-2" %>
+            <%= link_to "Destroy", book_path(@book), method: :delete, class: "btn btn-danger btn-sm", data: { confirm: "Are you sure?" } %>
+          </div>
+        <% end %>
+        
+        <div class="mt-3">
+          <% if @book.favorited_by?(current_user) %>
+            <%= link_to book_favorite_path(@book), method: :delete, class: "text-decoration-none" do %>
+              <i class="fas fa-heart"></i>
+              <span class="text-danger"><%= @book.favorites.count %></span>
+            <% end %>
+          <% else %>
+            <%= link_to book_favorite_path(@book), method: :post, class: "text-decoration-none" do %>
+              <i class="fas fa-heart"></i>
+              <span class="text-primary"><%= @book.favorites.count %></span>
+            <% end %>
+          <% end %>
+        </div>
+  
+        <div class="mt-3">
+          <p>コメント件数：<%= @book.book_comments.count %></p>
+        </div>
+      </div>
     </div>
+
+    <% @book.book_comments.each do |book_comment| %>
+      <div class="d-flex mb-4 border-bottom pb-2">
+        <div class="mr-3 text-center">
+          <%= image_tag book_comment.user.get_profile_image(50, 50), class: "rounded-circle mb-1" %>
+          <p class="mb-0"><strong><%= book_comment.user.name %></strong></p>
+        </div>
+        
+        <div>
+          <p class="mb-1"><%= book_comment.comment %></p>
+          <% if book_comment.user == current_user %>
+            <%= link_to "Destroy", book_book_comment_path(book_comment.book, book_comment), method: :delete, class: "btn btn-danger btn-sm" %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  
+    <div class="mt-4">
+      <%= form_with model: [@book, @book_comment] do |f| %>
+        <div class="form-group">
+          <%= f.text_area :comment, class: "form-control" %>
+        </div>
+        <%= f.submit "送信する", class: "btn btn-primary" %>
+      <% end %>
+    </div>
+  </div>
+  
   </div>
 </div>
